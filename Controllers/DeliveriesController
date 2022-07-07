@@ -1,0 +1,103 @@
+[ApiController]
+    [Route("api/[controller]")]
+    public class DeliveriesController : ControllerBase
+    {
+        private IDeliveryService _service;
+
+        public DeliveriesController(IDeliveryService service)
+        {
+            _service = service;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAsync([FromHeader] string token, [FromQuery] string deliveryKey)
+        {
+            if (string.IsNullOrEmpty(token)) return BadRequest();
+
+            try
+            {
+                var str = await _service.VerifyTokenWithPartyIdAsync(token, deliveryKey);
+                if (!str.Equals("permit", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    Log.Error($"Actor doesn't have permission access this resources {deliveryKey}");
+                    throw new Exception("You don't have permission access this resources");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"{ex.Message}");
+            }
+
+            var data = _service.CreateSampleDeliveryInfo();
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                StatusCode = 200,
+                Content = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    Formatting = Formatting.Indented
+                })
+            };
+        }
+
+        [HttpGet("TextData")]
+        public async Task<IActionResult> GetSampleTextDataAsync([FromHeader] string token, [FromQuery] string deliveryKey)
+        {
+            if (string.IsNullOrEmpty(token)) return BadRequest();
+
+            try
+            {
+                var str = await _service.VerifyTokenWithPartyIdAsync(token, deliveryKey);
+                if (!str.Equals("permit", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    Log.Error($"Actor doesn't have permission access this resources {deliveryKey}");
+                    throw new Exception("You don't have permission access this resources");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"{ex.Message}");
+            }
+
+            string data = _service.GetStringSampleText();
+            return new ContentResult
+            {
+                ContentType = "application/text",
+                StatusCode = 200,
+                Content = data
+            };
+        }
+
+        [HttpGet("JsonData")]
+        public async Task<IActionResult> GetSampleJsonDataAsync([FromHeader] string token, [FromQuery] string deliveryKey)
+        {
+            if (string.IsNullOrEmpty(token)) return BadRequest();
+
+            try
+            {
+                var str = await _service.VerifyTokenWithPartyIdAsync(token, deliveryKey);
+                if (!str.Equals("permit", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    Log.Error($"Actor doesn't have permission access this resources {deliveryKey}");
+                    throw new Exception("You don't have permission access this resources");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"{ex.Message}");
+            }
+
+            var data = _service.GetStringSampleJson();
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                StatusCode = 200,
+                Content = JsonConvert.SerializeObject(data, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    Formatting = Formatting.Indented
+                })
+            };
+        }
+    }
