@@ -1,24 +1,6 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using ShipperApi.Infrastructure.Services;
-using ShipperApi.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-
-namespace ShipperApi
-{
-    public class Startup
+public class Startup
     {
-        private readonly string _titleApiHub = $"Generic Hub for Shipper demo Version-30-Jun-2022";
+        private readonly string _titleApiHub = $"Resource-Ownership-APIs Version- V.01";
 
         public Startup(IConfiguration configuration)
         {
@@ -33,7 +15,7 @@ namespace ShipperApi
             services.AddControllers();
             services.AddScoped<IDeliveryService, DeliveryService>();
             services.Configure<IdentityHubSettings>(Configuration.GetSection("IdentityHubSettings"));
-            services.AddHttpClient("iSHARE", options =>
+            services.AddHttpClient("iSHARE-TCNS", options =>
             {
                 options.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
@@ -74,4 +56,3 @@ namespace ShipperApi
             });
         }
     }
-}
