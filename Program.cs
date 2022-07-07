@@ -1,12 +1,4 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-using System;
-
-namespace ShipperApi
-{
-    public class Program
+public class Program
     {
         public static void Main(string[] args)
         {
@@ -16,10 +8,10 @@ namespace ShipperApi
                  .Build();
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration)
                         .WriteTo.Console()
-                        .WriteTo.File($"Logs/ShipperApi-{DateTime.UtcNow:dd-MMM-yyyy}.txt")
+                        .WriteTo.File($"Logs/{DateTime.UtcNow:dd-MMM-yyyy}.txt")
                         .CreateLogger();
 
-            Log.Information("Shipper Api Hub starting...");
+            Log.Information("Resource Ownership Api starting...");
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -30,4 +22,3 @@ namespace ShipperApi
                     webBuilder.UseStartup<Startup>();
                 });
     }
-}
