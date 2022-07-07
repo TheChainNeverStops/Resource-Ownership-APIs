@@ -1,0 +1,5 @@
+public interface IDeliveryService
+    {
+        DeliveryInfo[] CreateSampleDeliveryInfo();
+        Task<string> VerifyTokenWithPartyIdAsync(string token, string deliveryKey);
+    }
