@@ -15,7 +15,7 @@
 
             try
             {
-                var str = await _service.VerifyTokenWithPartyIdAsync(token, genericKey);
+                var str = await _service.VerifyPartyIdHasPermitOnGenericKeyAsync(token, genericKey);
                 if (!str.Equals("permit", StringComparison.CurrentCultureIgnoreCase))
                 {
                     Log.Error($"Actor doesn't have permission access this resources {genericKey}");
@@ -27,7 +27,7 @@
                 return BadRequest($"{ex.Message}");
             }
 
-            var data = _service.CreateSampleDeliveryInfo();
+            var data = await _service.ExposedDeliveriesBasedOnGenericKeyAsync(genericKey);
             return new ContentResult
             {
                 ContentType = "application/json",
