@@ -27,7 +27,7 @@
                 return BadRequest($"{ex.Message}");
             }
 
-            var data = await _service.ExposedDeliveriesBasedOnGenericKeyAsync(genericKey);
+            var data = await _service.ExposedDataBasedOnGenericKeyAsync(genericKey);
             return new ContentResult
             {
                 ContentType = "application/json",
